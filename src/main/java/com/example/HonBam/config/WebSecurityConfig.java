@@ -58,6 +58,7 @@ public class WebSecurityConfig {
                 .antMatchers("/api/recipe").permitAll()
                 // '/api/auth'로 시작하는 요청과 '/'요청은 권한 검사 없이 허용하겠다.
                 .antMatchers("/", "/api/auth/**").permitAll()
+                .antMatchers("/api/freeboard").permitAll()
                 .antMatchers("/api/posts/**").permitAll()
                 // '/api/HonBams'라는 요청이 POST로 들어오고, Role 값이 ADMIN인 경우 권한 검사 없이 허용하겠다.
 //                .antMatchers(HttpMethod.POST, "/api/HonBams").hasRole("ADMIN").permitAll()
