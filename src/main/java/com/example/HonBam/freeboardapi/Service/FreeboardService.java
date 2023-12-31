@@ -14,9 +14,11 @@ import com.example.HonBam.userapi.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -46,10 +48,20 @@ public class FreeboardService {
         );
     }
 
+    public FreeboardDetailResponseDTO getContent(Long id) {
+
+
+        Freeboard freeboard = freeboardRepository.findById(id).orElseThrow(
+                () -> new RuntimeException(id + "번 게시물이 존재하지 않습니다.")
+        );
+
+        return new FreeboardDetailResponseDTO((freeboard));
+    }
+
     public FreeboardResponseDTO retrieve(String userId) {
 
-        // 로그인 한 유저의 정보를 데이터베이스 조회
-        User user = getUser(userId);
+//        // 로그인 한 유저의 정보를 데이터베이스 조회
+//        User user = getUser(userId);
 
         List<Freeboard> entityList = freeboardRepository.findAll();
 
@@ -60,6 +72,7 @@ public class FreeboardService {
 
         return FreeboardResponseDTO
                 .builder()
+                .count(dtoList.size())
                 .posts(dtoList)
                 .build();
     }
@@ -73,10 +86,14 @@ public class FreeboardService {
     }
 
 
-    public Freeboard modify(TokenUserInfo userInfo, Long id, FreeboardRequestDTO requestDTO) {
-        Freeboard found = freeboardRepository.findById(id).orElseThrow();
+    public FreeboardDetailResponseDTO modify(TokenUserInfo userInfo, Long id, FreeboardRequestDTO requestDTO) {
         User user = getUser(userInfo.getUserId());
-        freeboardRepository.save(requestDTO.toEntity(user));
-        return ;
+//        freeboardRepository.save(requestDTO.toEntity(user));
+        Freeboard foundContents = freeboardRepository.findById(id).orElseThrow();
+
+        Freeboard entity = requestDTO.toEntity(foundContents, user);
+        entity.setUpdateDate(LocalDateTime.now());
+        Freeboard save = freeboardRepository.save(entity);
+        return new FreeboardDetailResponseDTO(save);
     }
 }

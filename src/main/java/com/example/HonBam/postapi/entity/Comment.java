@@ -1,6 +1,7 @@
 package com.example.HonBam.postapi.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -12,7 +13,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Setter @Getter
-@ToString @EqualsAndHashCode
+@ToString(exclude = "post") @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -39,8 +40,9 @@ public class Comment {
     @UpdateTimestamp
     private LocalDateTime updateTime;// 수정시간
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
+    @JsonIgnore
     private Post post;
 
 

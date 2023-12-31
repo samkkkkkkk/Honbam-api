@@ -2,6 +2,7 @@ package com.example.HonBam.postapi.entity;
 
 import com.example.HonBam.userapi.entity.User;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
@@ -9,9 +10,12 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Setter @Getter
-@ToString @EqualsAndHashCode(of = "postId")
+@ToString
+@EqualsAndHashCode(of = "postId")
 @NoArgsConstructor @AllArgsConstructor
 @Builder
 @Entity
@@ -39,6 +43,11 @@ public class Post {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    @Builder.Default
+    @JsonIgnore
+    private List<Comment> commentList = new ArrayList<>();
     
 }
 

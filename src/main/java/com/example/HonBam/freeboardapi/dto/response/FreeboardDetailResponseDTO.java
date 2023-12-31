@@ -17,10 +17,8 @@ public class FreeboardDetailResponseDTO {
     private String title;
     private String content;
     private String userName;
-    @JsonFormat(pattern = "yyyy/MM/dd")
-    private LocalDateTime createDate;
-    @JsonFormat(pattern = "yyyy/MM/dd")
-    private LocalDateTime updateDate;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    private LocalDateTime date;
 
 
     public FreeboardDetailResponseDTO(Freeboard freeboard) {
@@ -28,8 +26,11 @@ public class FreeboardDetailResponseDTO {
         this.title = freeboard.getTitle();
         this.content = freeboard.getContent();
         this.userName = freeboard.getUser().getUserName();
-        this.createDate = freeboard.getCreateDate();
-        this.updateDate = freeboard.getUpdateDate();
+        if(freeboard.getUpdateDate() != null){
+            this.date = freeboard.getUpdateDate();
+        }else {
+            this.date = freeboard.getCreateDate();
+        }
     }
 
 

@@ -17,5 +17,6 @@ import java.util.List;
 public class FreeboardResponseDTO {
 
     private List<FreeboardDetailResponseDTO> posts;
+    private int count;
 
 }

@@ -16,7 +16,7 @@ public class CommentCreateRequestDTO {
 
     public Comment toEntity(User user, Post post) {
         return Comment.builder()
-                .writer(user.getId())
+                .writer(user.getUserName())
                 .comment(this.comment)
                 .post(post)
                 .build();

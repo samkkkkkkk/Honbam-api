@@ -4,6 +4,7 @@ import com.example.HonBam.auth.TokenUserInfo;
 import com.example.HonBam.postapi.dto.request.CommentCreateRequestDTO;
 import com.example.HonBam.postapi.dto.request.PostCreateRequestDTO;
 import com.example.HonBam.postapi.dto.response.PostListResponseDTO;
+import com.example.HonBam.postapi.entity.Comment;
 import com.example.HonBam.postapi.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -77,6 +78,14 @@ public class PostController {
         }
     }
 
+//    @PostMapping("/like/{id}")
+//    public ResponseEntity<?> registLike(
+//            @AuthenticationPrincipal TokenUserInfo userInfo,
+//            @PathVariable
+//    ) {
+//
+//    }
+
     //     게시글 목록 요청
 //    @GetMapping
 //    public ResponseEntity<?> retrievePostList(
@@ -123,36 +132,7 @@ public class PostController {
             }
             return ResponseEntity.ok().body(fileDataList);
 
-//            // 모든 사용자가 프로필 사진을 가지는 것은 아니다. -> 프사가 없는 사람들은 경로가 존재하지 않을 것이다.
-//            // 만약 존재하지 않는 경로라면 클라이언트로 404 status를 리턴.
-//            if(!profileFile.exists()) {
-//                if(filePath.startsWith("http://")) {
-//                    return ResponseEntity.ok().body(filePath);
-//                }
-//                return ResponseEntity.notFound().build();
-//            }
-//
-//            // 해당 경로에 저장된 파일을 바이트 배열로 직렬화 해서 리턴.
-//            byte[] fileData = FileCopyUtils.copyToByteArray(profileFile);
-//
-//            // 3. 응답 헤더에 컨텐츠 타입을 설정.
-//            HttpHeaders headers = new HttpHeaders();
-//            MediaType contentType = findExtensionAndGetMediaType(filePath);
-//            if(contentType == null) {
-//                return ResponseEntity.internalServerError()
-//                        .body("발견된 파일은 이미지 파일이 아닙니다.");
-//            }
-//            headers.setContentType(contentType);
-//
-//            return ResponseEntity.ok()
-//                    .headers(headers)
-//                    .body(fileData);
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            return ResponseEntity.internalServerError()
-//                    .body("파일을 찾을 수 없습니다.");
-//        }
+
         } catch (IOException e) {
             log.info("\n\n\n\n 가자 !!");
 
@@ -161,12 +141,7 @@ public class PostController {
         }
     }
 
-    //    @GetMapping
-//    public ResponseEntity<?> snsBoardList() {
-//        List<PostDetailResponseDTO> snsList = PostService.getAllList();
-//
-//        return ResponseEntity.ok().body(snsList);
-//    }
+
     // 할 일 삭제 요청
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deletePost(
@@ -226,12 +201,21 @@ public class PostController {
 //    public String postIdContain() {
 //        return
 //    }
-    @PostMapping("/comment/{postId}")
-    public void createComment(
-//            @PathVariable("postId") String postId,
+    @PostMapping("/comment")
+    public ResponseEntity<List<Comment>> createComment(
             @AuthenticationPrincipal TokenUserInfo userInfo,
             @RequestBody CommentCreateRequestDTO dto
     ){
-        postService.commentRegist(dto, userInfo);
+
+        return ResponseEntity.ok().body(postService.commentRegist(dto, userInfo));
+    }
+
+    @GetMapping("/comment")
+    public ResponseEntity<?> commentLis (
+            @AuthenticationPrincipal TokenUserInfo userInfo,
+            @RequestParam String postId
+            ){
+        List<Comment> comments = postService.commentList(userInfo, postId);
+        return ResponseEntity.ok().body(comments);
     }
 }

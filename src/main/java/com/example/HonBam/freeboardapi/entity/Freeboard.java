@@ -40,6 +40,7 @@ public class Freeboard {
     private LocalDateTime createDate;
 
     @UpdateTimestamp
+    @Column(insertable = false)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updateDate;
 

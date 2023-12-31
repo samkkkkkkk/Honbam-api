@@ -27,4 +27,14 @@ public class FreeboardRequestDTO {
                 .build();
     }
 
+    public Freeboard toEntity(Freeboard foundContents, User user) {
+        return Freeboard.builder()
+                .Id(foundContents.getId())
+                .content(this.content)
+                .title((this.title))
+                .userName(foundContents.getUserName())
+                .user(user)
+                .build();
+    }
+
 }

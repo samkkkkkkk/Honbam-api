@@ -5,6 +5,7 @@ import com.example.HonBam.postapi.dto.request.CommentCreateRequestDTO;
 import com.example.HonBam.postapi.dto.request.PostCreateRequestDTO;
 import com.example.HonBam.postapi.dto.response.PostDetailResponseDTO;
 import com.example.HonBam.postapi.dto.response.PostListResponseDTO;
+import com.example.HonBam.postapi.entity.Comment;
 import com.example.HonBam.postapi.entity.Post;
 import com.example.HonBam.postapi.repository.CommentRepository;
 import com.example.HonBam.postapi.repository.PostRepository;
@@ -134,15 +135,23 @@ public class PostService {
 
     }
 
-    public void commentRegist(
+    public List<Comment> commentRegist(
 //            final String postId,
             final CommentCreateRequestDTO dto,
             final TokenUserInfo userInfo
     ) {
 
         User user = getUser(userInfo.getUserId());
-//        commentRepository.save(dto.toEntity(user,post));
+        Post post = PostRepository.findById(dto.getPostId()).orElseThrow();
+        commentRepository.save(dto.toEntity(user, post));
+        return post.getCommentList();
+
+
         
+    }
+
+    public List<Comment> commentList(TokenUserInfo userInfo, String postId) {
+        return PostRepository.findById(postId).orElseThrow().getCommentList();
     }
 
 

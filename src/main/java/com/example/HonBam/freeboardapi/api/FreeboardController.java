@@ -3,7 +3,9 @@ package com.example.HonBam.freeboardapi.api;
 import com.example.HonBam.auth.TokenUserInfo;
 import com.example.HonBam.freeboardapi.Service.FreeboardService;
 import com.example.HonBam.freeboardapi.dto.request.FreeboardRequestDTO;
+import com.example.HonBam.freeboardapi.dto.response.FreeboardDetailResponseDTO;
 import com.example.HonBam.freeboardapi.dto.response.FreeboardResponseDTO;
+import com.example.HonBam.freeboardapi.entity.Freeboard;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +21,7 @@ public class FreeboardController {
 
     private final FreeboardService freeboardService;
 
+    // 게시글 등록 요청
     @PostMapping
     public ResponseEntity<?> createContent(
             @AuthenticationPrincipal TokenUserInfo userInfo,
@@ -32,6 +35,7 @@ public class FreeboardController {
 
     }
 
+    // 게시글 목록 조회
     @GetMapping
     public ResponseEntity<?> contentList(
             @AuthenticationPrincipal TokenUserInfo userInfo
@@ -42,6 +46,7 @@ public class FreeboardController {
 
     }
 
+    // 게시글 삭제 요청
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteContent(
             @AuthenticationPrincipal TokenUserInfo userInfo,
@@ -62,6 +67,7 @@ public class FreeboardController {
         }
     }
 
+    // 게시글 수정하기
     @PutMapping("/{id}")
     public ResponseEntity<?> modifyContent(
             @AuthenticationPrincipal TokenUserInfo userInfo,
@@ -69,8 +75,20 @@ public class FreeboardController {
             @RequestBody FreeboardRequestDTO RequestDTO
     ) {
 
-        freeboardService.modify(userInfo.getUserId(), id, RequestDTO);
-        return null;
+        FreeboardDetailResponseDTO modifyContent = freeboardService.modify(userInfo, id, RequestDTO);
+        return ResponseEntity.ok().body(modifyContent);
+
+    }
+
+    // 게시글 상세보기
+    @GetMapping("/detail/{id}")
+    public ResponseEntity<?> detailContent(
+            @AuthenticationPrincipal TokenUserInfo userInfo,
+            @PathVariable("id") Long id
+    ){
+        return ResponseEntity
+                .ok()
+                .body(freeboardService.getContent(id));
 
     }
 
