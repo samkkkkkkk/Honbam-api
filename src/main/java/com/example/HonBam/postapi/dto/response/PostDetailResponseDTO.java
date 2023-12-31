@@ -18,6 +18,7 @@ public class PostDetailResponseDTO {
     private LocalDateTime updateDate;
     private String postImg;
     private String userId;
+    private String userName;
 
     // 엔터티를 DTO로 만들어주는 생성자
     public PostDetailResponseDTO(Post post) {
@@ -26,6 +27,7 @@ public class PostDetailResponseDTO {
         this.updateDate = post.getUpdateDate();
         this.postImg = post.getPostImg();
         this.userId = post.getUser().getId();
+        this.userName = post.getUser().getUserName();
     }
 }
 

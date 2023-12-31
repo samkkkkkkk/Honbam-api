@@ -19,7 +19,7 @@ public class CommentCreateRequestDTO {
                 .writer(user.getUserName())
                 .comment(this.comment)
                 .post(post)
+                .userId(user.getId())
                 .build();
-
     }
 }

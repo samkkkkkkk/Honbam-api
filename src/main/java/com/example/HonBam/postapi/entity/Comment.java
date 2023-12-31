@@ -40,10 +40,14 @@ public class Comment {
     @UpdateTimestamp
     private LocalDateTime updateTime;// 수정시간
 
+    @Column(nullable = false)
+    private String userId;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     @JsonIgnore
     private Post post;
+
 
 
 }

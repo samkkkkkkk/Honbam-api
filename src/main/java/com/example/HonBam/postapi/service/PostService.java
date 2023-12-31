@@ -2,12 +2,15 @@ package com.example.HonBam.postapi.service;
 
 import com.example.HonBam.auth.TokenUserInfo;
 import com.example.HonBam.postapi.dto.request.CommentCreateRequestDTO;
+import com.example.HonBam.postapi.dto.request.ModifyRequestDTO;
 import com.example.HonBam.postapi.dto.request.PostCreateRequestDTO;
 import com.example.HonBam.postapi.dto.response.PostDetailResponseDTO;
 import com.example.HonBam.postapi.dto.response.PostListResponseDTO;
+import com.example.HonBam.postapi.dto.response.RegisterLikeDTO;
 import com.example.HonBam.postapi.entity.Comment;
 import com.example.HonBam.postapi.entity.Post;
 import com.example.HonBam.postapi.repository.CommentRepository;
+import com.example.HonBam.postapi.repository.LikeRepository;
 import com.example.HonBam.postapi.repository.PostRepository;
 import com.example.HonBam.userapi.entity.User;
 import com.example.HonBam.userapi.repository.UserRepository;
@@ -20,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -38,8 +42,6 @@ public class PostService {
     private final UserRepository userRepository;
     private final CommentRepository commentRepository;
 
-
-
     public PostListResponseDTO create(
             final PostCreateRequestDTO requestDTO,
             final TokenUserInfo userInfo,
@@ -47,22 +49,16 @@ public class PostService {
     )
             throws RuntimeException {
 
-
-
         User user = getUser(userInfo.getUserId());
 //        log.info("userL {}", user);
 
-
         PostRepository.save(requestDTO.toEntity(user, filePath));
 //        log.info("게시글 저장 완료!: {}", requestDTO.getContent());
-        return retrieve(userInfo.getUserId());
+        return retrieve();
     }
 
-
-    public PostListResponseDTO retrieve(String userId) {
-
-        // 로그인 한 유저의 정보를 데이터베이스 조회
-        User user = getUser(userId);
+    // 게시글 리스트 불러오기
+    public PostListResponseDTO retrieve() {
 
         List<Post> entityList = PostRepository.findAll();
 
@@ -70,15 +66,6 @@ public class PostService {
                 = entityList.stream()
                 .map(PostDetailResponseDTO::new)
                 .collect(Collectors.toList());
-//        System.out.println("dtoList===" + dtoList);
-
-//        for(Post post : entityList) {
-//            post.getPostImg()
-//        }
-//        File postFile = new File(filePath);
-//
-//        byte[] fileData = FileCopyUtils.copyToByteArray(postFile);
-//        fileDataList.add(fileData);
 
   return PostListResponseDTO.builder()
                 .posts(dtoList)
@@ -92,15 +79,23 @@ public class PostService {
         return user;
     }
 
-    public PostListResponseDTO delete(final String postId, final String userId) {
+    public PostListResponseDTO delete(final String postId) {
         try {
+
+            List<Long> commentId = PostRepository.findById(postId).orElseThrow().getCommentList()
+                    .stream().map(Comment::getCommentID).collect(Collectors.toList());
+
+            for( Long id : commentId) {
+                commentRepository.deleteById(id);
+            }
+
             PostRepository.deleteById(postId);
         } catch (Exception e) {
             log.error("id가 존재하지 않아 삭제에 실패했습니다. - ID: {}, err: {}"
                     , postId, e.getMessage());
             throw new RuntimeException("id가 존재하지 않아 삭제에 실패했습니다.");
         }
-        return retrieve(userId);
+        return retrieve();
     }
 
     public String uploadFileImg(MultipartFile postImg) throws IOException {
@@ -150,16 +145,48 @@ public class PostService {
         
     }
 
-    public List<Comment> commentList(TokenUserInfo userInfo, String postId) {
+    // 목록 요청
+    public List<Comment> commentList(String postId) {
         return PostRepository.findById(postId).orElseThrow().getCommentList();
     }
 
+    // 삭제요청
+    public List<Comment> commentDelete(TokenUserInfo userInfo, Long id) {
+        Comment comment = commentRepository.findById(id).orElseThrow();
+        commentRepository.deleteById(id);
+        return commentList(comment.getPost().getPostId());
+    }
 
-//    public List<PostListResponseDTO> getAllList() {
-//        List<Post> findList = PostRepository.findAll();
-//        return findList.stream().map(PostListResponseDTO::new).collect(Collectors.toList());
-//
-//    }
+    public boolean validateWriter(TokenUserInfo userInfo, Long id) {
+        Comment comment = commentRepository.findById(id).orElseThrow();
+        return comment.getUserId().equals(userInfo.getUserId());
+    }
+
+    public boolean validateWriter(TokenUserInfo userInfo, String id) {
+        Post post = PostRepository.findById(id).orElseThrow();
+        return post.getUser().getId().equals(userInfo.getUserId());
+    }
+
+    public List<Comment> modify(ModifyRequestDTO requestDTO) {
+
+        Comment comment = commentRepository.findById(requestDTO.getCommentId()).orElseThrow();
+        comment.setComment(requestDTO.getComment());
+        comment.setUpdateTime(LocalDateTime.now());
+
+        Comment save = commentRepository.save(comment);
+        return commentList(save.getPost().getPostId());
+    }
+
+    public void registerLike(String postId, TokenUserInfo userInfo) {
+
+        Post post = PostRepository.findById(postId).orElseThrow();
+
+//        RegisterLikeDTO
+
+    }
+
+
+
 
 //    public PostListResponseDTO update(final PostModifyRequestDTO requestDTO, final String userId)
 //        throws RuntimeException {
