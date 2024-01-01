@@ -2,15 +2,23 @@ package com.example.HonBam.freeboardapi.api;
 
 import com.example.HonBam.auth.TokenUserInfo;
 import com.example.HonBam.freeboardapi.Service.FreeboardService;
+import com.example.HonBam.freeboardapi.dto.request.CommentModifyRequestDTO;
+import com.example.HonBam.freeboardapi.dto.request.FreeboardCommentRequestDTO;
 import com.example.HonBam.freeboardapi.dto.request.FreeboardRequestDTO;
 import com.example.HonBam.freeboardapi.dto.response.FreeboardDetailResponseDTO;
 import com.example.HonBam.freeboardapi.dto.response.FreeboardResponseDTO;
 import com.example.HonBam.freeboardapi.entity.Freeboard;
+import com.example.HonBam.freeboardapi.entity.FreeboardComment;
+import com.example.HonBam.postapi.dto.request.CommentCreateRequestDTO;
+import com.example.HonBam.postapi.dto.request.ModifyRequestDTO;
+import com.example.HonBam.postapi.entity.Comment;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @Slf4j
@@ -74,7 +82,7 @@ public class FreeboardController {
             @PathVariable("id") Long id,
             @RequestBody FreeboardRequestDTO RequestDTO
     ) {
-
+        System.out.println("수정 요청 성공");
         FreeboardDetailResponseDTO modifyContent = freeboardService.modify(userInfo, id, RequestDTO);
         return ResponseEntity.ok().body(modifyContent);
 
@@ -89,6 +97,53 @@ public class FreeboardController {
         return ResponseEntity
                 .ok()
                 .body(freeboardService.getContent(id));
+
+    }
+
+    // 댓글 등록
+    @PostMapping("/comment")
+    public ResponseEntity<List<FreeboardComment>> createComment(
+            @AuthenticationPrincipal TokenUserInfo userInfo,
+            @RequestBody FreeboardCommentRequestDTO dto
+    ){
+
+        return ResponseEntity.ok().body(freeboardService.commentRegist(dto, userInfo));
+    }
+
+    // 댓글 목록 요청
+    @GetMapping("/comment")
+    public ResponseEntity<?> commentLis (
+            @AuthenticationPrincipal TokenUserInfo userInfo,
+            @RequestParam Long id
+    ){
+        List<FreeboardComment> comments = freeboardService.commentList(id);
+        return ResponseEntity.ok().body(comments);
+    }
+
+    // 댓글 삭제 요청
+    @DeleteMapping("/comment")
+    public ResponseEntity<?> deleteComment(
+            @AuthenticationPrincipal TokenUserInfo userInfo,
+            @RequestParam Long id
+    ) {
+        if(!freeboardService.validateWriter(userInfo, id)) {
+            return ResponseEntity.badRequest().body("fail");
+        }
+
+        return ResponseEntity.ok().body(freeboardService.commentDelete(userInfo, id));
+
+    }
+
+    // 댓글 수정
+    @PutMapping("/comment")
+    public ResponseEntity<?> modifyComment(
+            @AuthenticationPrincipal TokenUserInfo userInfo,
+            @RequestBody CommentModifyRequestDTO requestDTO
+    ){
+        if(!freeboardService.validateWriter(userInfo, requestDTO.getId())){
+            return ResponseEntity.badRequest().body("fail");
+        }
+        return ResponseEntity.ok().body(freeboardService.modify(requestDTO));
 
     }
 

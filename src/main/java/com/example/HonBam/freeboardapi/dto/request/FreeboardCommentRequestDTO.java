@@ -1,4 +1,4 @@
-package com.example.HonBam.postapi.dto.request;
+package com.example.HonBam.freeboardapi.dto.request;
 
 import com.example.HonBam.freeboardapi.entity.Freeboard;
 import com.example.HonBam.freeboardapi.entity.FreeboardComment;
@@ -12,15 +12,15 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CommentCreateRequestDTO {
+public class FreeboardCommentRequestDTO {
     private String comment;
-    private String postId;
+    private Long id;
 
-    public Comment toEntity(User user, Post post) {
-        return Comment.builder()
+    public FreeboardComment toEntity(User user, Freeboard freeboard) {
+        return FreeboardComment.builder()
                 .writer(user.getUserName())
                 .comment(this.comment)
-                .post(post)
+                .freeboard(freeboard)
                 .userId(user.getId())
                 .build();
     }

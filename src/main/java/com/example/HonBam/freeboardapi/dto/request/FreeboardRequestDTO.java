@@ -29,7 +29,7 @@ public class FreeboardRequestDTO {
 
     public Freeboard toEntity(Freeboard foundContents, User user) {
         return Freeboard.builder()
-                .Id(foundContents.getId())
+                .id(foundContents.getId())
                 .content(this.content)
                 .title((this.title))
                 .userName(foundContents.getUserName())

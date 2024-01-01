@@ -138,8 +138,9 @@ public class PostController {
         }
         return ResponseEntity.ok().body(postService.delete(postId));
     }
-
     
+    
+    // 댓글 요청 시작
     // 댓글 등록
     @PostMapping("/comment")
     public ResponseEntity<List<Comment>> createComment(

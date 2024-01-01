@@ -2,18 +2,23 @@ package com.example.HonBam.freeboardapi.entity;
 
 import com.example.HonBam.freeboardapi.dto.request.FreeboardRequestDTO;
 import com.example.HonBam.freeboardapi.dto.response.FreeboardResponseDTO;
+import com.example.HonBam.postapi.entity.Comment;
 import com.example.HonBam.userapi.entity.User;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
 @Entity
 @Getter @Setter
+@ToString @EqualsAndHashCode(of = "id")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -22,7 +27,7 @@ public class Freeboard {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long Id;
+    private long id;
 
 
     @Column(nullable = false)
@@ -47,6 +52,11 @@ public class Freeboard {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    @OneToMany(mappedBy = "freeboard", cascade = CascadeType.ALL)
+    @Builder.Default
+    @JsonIgnore
+    private List<FreeboardComment> commentList = new ArrayList<>();
 
 
 
