@@ -132,6 +132,8 @@ public class FreeboardController {
 
         return ResponseEntity.ok().body(freeboardService.commentDelete(userInfo, id));
 
+
+
     }
 
     // 댓글 수정
