@@ -13,6 +13,7 @@ import java.time.LocalDate;
 @Builder
 public class LoginResponseDTO {
 
+    private String userId;
     private String email;
     private String userName;
 
@@ -25,11 +26,12 @@ public class LoginResponseDTO {
     private String userPay;
     private String address;
     private String phoneNumber;
-    private String password;
+
 
 
 
     public LoginResponseDTO(User user, String token) {
+        this.userId = user.getUserId();
         this.email = user.getEmail();
         this.userName = user.getUserName();
         this.joinDate = LocalDate.from(user.getJoinDate());
@@ -38,16 +40,10 @@ public class LoginResponseDTO {
         this.userPay = String.valueOf(user.getUserPay());
         this.address = user.getAddress();
         this.phoneNumber = user.getPhoneNumber();
-        this.password = user.getPassword();
+
 
     }
 }
-
-
-
-
-
-
 
 
 

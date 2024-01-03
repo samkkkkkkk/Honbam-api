@@ -19,7 +19,7 @@ public class FreeboardCommentRequestDTO {
                 .writer(user.getUserName())
                 .comment(this.comment)
                 .freeboard(freeboard)
-                .userId(user.getId())
+                .userId(user.getUserId())
                 .build();
     }
 }

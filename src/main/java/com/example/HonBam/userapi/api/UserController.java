@@ -285,7 +285,17 @@ public class UserController {
         }
     }
 
-
-
+    @GetMapping("/profile-s3")
+    public ResponseEntity<?> s3Profile(
+            @AuthenticationPrincipal TokenUserInfo userInfo
+    ){
+        try {
+            String profilePath = userService.findProfilePath(userInfo.getUserId());
+            return ResponseEntity.ok().body(profilePath);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 
 }

@@ -121,15 +121,13 @@ public class FreeboardController {
     }
 
     // 댓글 삭제 요청
-    @DeleteMapping("/comment")
+    @DeleteMapping("/comment/{commentId}")
     public ResponseEntity<?> deleteComment(
             @AuthenticationPrincipal TokenUserInfo userInfo,
-            @PathVariable Long id
+            @PathVariable() Long commentId
     ) {
 
-        return ResponseEntity.ok().body(freeboardService.commentDelete(userInfo, id));
-
-
+        return ResponseEntity.ok().body(freeboardService.commentDelete(userInfo, commentId));
 
     }
 

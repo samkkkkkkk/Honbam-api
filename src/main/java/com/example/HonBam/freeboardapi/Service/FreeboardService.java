@@ -32,6 +32,7 @@ public class FreeboardService {
     private final FreeboardCommentRepository freeboardCommentRepository;
 
 
+    // 게시글 등록
     public FreeboardResponseDTO createContent(
             final FreeboardRequestDTO requestDto,
             final TokenUserInfo userInfo) {
@@ -41,13 +42,15 @@ public class FreeboardService {
         return retrieve();
     }
 
+    // 회워정보 조회
     private User getUser(String userId) {
         return userRepository.findById(userId).orElseThrow(
                 () -> new RuntimeException("회원 정보가 없습니다.")
         );
 
     }
-
+    
+    // 게시글 상세보기
     public FreeboardDetailResponseDTO getContent(Long id) {
 
         Freeboard freeboard = freeboardRepository.findById(id).orElseThrow(
@@ -57,6 +60,7 @@ public class FreeboardService {
         return new FreeboardDetailResponseDTO((freeboard));
     }
 
+    // 게시글 리스트 
     public FreeboardResponseDTO retrieve() {
 
 //        // 로그인 한 유저의 정보를 데이터베이스 조회
@@ -76,7 +80,8 @@ public class FreeboardService {
                 .build();
     }
 
-
+    
+    // 게시글 삭제
     public FreeboardResponseDTO delete(final String userId, final Long id) {
 
         freeboardRepository.deleteById(id);
@@ -85,7 +90,7 @@ public class FreeboardService {
     }
 
 
-    // 게시글 상세보기
+    // 게시글 수정하기
     public FreeboardDetailResponseDTO modify(TokenUserInfo userInfo, Long id, FreeboardRequestDTO requestDTO) {
         User user = getUser(userInfo.getUserId());
 //        freeboardRepository.save(requestDTO.toEntity(user));
@@ -119,12 +124,13 @@ public class FreeboardService {
     }
 
     // 삭제요청
-    public List<FreeboardComment> commentDelete(TokenUserInfo userInfo, Long id) {
-        FreeboardComment comment = freeboardCommentRepository.findById(id).orElseThrow();
-        freeboardRepository.deleteById(id);
+    public List<FreeboardComment> commentDelete(TokenUserInfo userInfo, Long commentId) {
+        FreeboardComment comment = freeboardCommentRepository.findById(commentId).orElseThrow();
+        freeboardCommentRepository.deleteById(commentId);
         return commentList(comment.getFreeboard().getId());
     }
 
+    // 유효성 검사
     public boolean validateWriter(TokenUserInfo userInfo, Long id) {
         if(freeboardCommentRepository.findById(id).isPresent()) {
             FreeboardComment comment = freeboardCommentRepository.findById(id).orElseThrow();
@@ -132,7 +138,7 @@ public class FreeboardService {
         }
         if(freeboardRepository.findById(id).isPresent()){
             Freeboard freeboard = freeboardRepository.findById(id).orElseThrow();
-            return freeboard.getUser().getId().equals(userInfo.getUserId());
+            return freeboard.getUser().getUserId().equals(userInfo.getUserId());
         }
         return false;
     }

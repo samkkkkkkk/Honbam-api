@@ -8,7 +8,8 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Getter
-@ToString @EqualsAndHashCode(of = "id")
+@ToString
+@EqualsAndHashCode(of = "userId")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -18,10 +19,10 @@ import java.time.LocalDateTime;
 public class User {
 
     @Id
-    @Column(name = "user_id")
+//    @Column(name = "user_id")
     @GeneratedValue(generator = "system-uuid")
     @GenericGenerator(name = "system-uuid", strategy = "uuid")
-    private String id; // 계정명이 아니라 식별 코드
+    private String userId; // 계정명이 아니라 식별 코드
 
     @Column(nullable = false, unique = true)
     private String email;
