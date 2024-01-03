@@ -10,7 +10,6 @@ import com.example.HonBam.freeboardapi.entity.Freeboard;
 import com.example.HonBam.freeboardapi.entity.FreeboardComment;
 import com.example.HonBam.freeboardapi.repository.FreeboardCommentRepository;
 import com.example.HonBam.freeboardapi.repository.FreeboardRepository;
-import com.example.HonBam.postapi.entity.Post;
 import com.example.HonBam.userapi.entity.User;
 import com.example.HonBam.userapi.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -50,7 +49,6 @@ public class FreeboardService {
     }
 
     public FreeboardDetailResponseDTO getContent(Long id) {
-
 
         Freeboard freeboard = freeboardRepository.findById(id).orElseThrow(
                 () -> new RuntimeException(id + "번 게시물이 존재하지 않습니다.")
