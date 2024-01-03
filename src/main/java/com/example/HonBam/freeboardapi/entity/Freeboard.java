@@ -39,7 +39,6 @@ public class Freeboard {
     @Column(nullable = false)
     private String userName;
 
-
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDateTime createDate;
@@ -53,11 +52,9 @@ public class Freeboard {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "freeboard", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "freeboard", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     @JsonIgnore
     private List<FreeboardComment> commentList = new ArrayList<>();
-
-
 
 }

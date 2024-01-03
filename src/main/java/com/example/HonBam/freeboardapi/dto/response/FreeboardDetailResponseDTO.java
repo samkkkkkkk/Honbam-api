@@ -17,6 +17,7 @@ public class FreeboardDetailResponseDTO {
     private String title;
     private String content;
     private String userName;
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime date;
 

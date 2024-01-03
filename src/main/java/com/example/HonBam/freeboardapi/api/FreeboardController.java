@@ -48,8 +48,11 @@ public class FreeboardController {
     public ResponseEntity<?> contentList(
             @AuthenticationPrincipal TokenUserInfo userInfo
         ) {
-
-        FreeboardResponseDTO responseDTO = freeboardService.retrieve(userInfo.getUserId());
+        log.info("유저=={}", userInfo);
+        if(userInfo == null) {
+            return ResponseEntity.badRequest().body("목록을 불러오지 못했습니다.");
+        }
+        FreeboardResponseDTO responseDTO = freeboardService.retrieve();
         return ResponseEntity.ok().body(responseDTO);
 
     }
@@ -91,9 +94,9 @@ public class FreeboardController {
     // 게시글 상세보기
     @GetMapping("/detail/{id}")
     public ResponseEntity<?> detailContent(
-            @AuthenticationPrincipal TokenUserInfo userInfo,
             @PathVariable("id") Long id
     ){
+
         return ResponseEntity
                 .ok()
                 .body(freeboardService.getContent(id));
@@ -116,15 +119,16 @@ public class FreeboardController {
             @AuthenticationPrincipal TokenUserInfo userInfo,
             @RequestParam Long id
     ){
+
         List<FreeboardComment> comments = freeboardService.commentList(id);
         return ResponseEntity.ok().body(comments);
     }
 
     // 댓글 삭제 요청
-    @DeleteMapping("/comment")
+    @DeleteMapping("/comment/{id}")
     public ResponseEntity<?> deleteComment(
             @AuthenticationPrincipal TokenUserInfo userInfo,
-            @RequestParam Long id
+            @PathVariable Long id
     ) {
         if(!freeboardService.validateWriter(userInfo, id)) {
             return ResponseEntity.badRequest().body("fail");

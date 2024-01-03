@@ -39,13 +39,14 @@ public class FreeboardService {
 
         User user = getUser(userInfo.getUserId());
         freeboardRepository.save(requestDto.toEntity(user));
-        return retrieve(userInfo.getUserId());
+        return retrieve();
     }
 
     private User getUser(String userId) {
         return userRepository.findById(userId).orElseThrow(
                 () -> new RuntimeException("회원 정보가 없습니다.")
         );
+
     }
 
     public FreeboardDetailResponseDTO getContent(Long id) {
@@ -58,7 +59,7 @@ public class FreeboardService {
         return new FreeboardDetailResponseDTO((freeboard));
     }
 
-    public FreeboardResponseDTO retrieve(String userId) {
+    public FreeboardResponseDTO retrieve() {
 
 //        // 로그인 한 유저의 정보를 데이터베이스 조회
 //        User user = getUser(userId);
@@ -81,7 +82,7 @@ public class FreeboardService {
     public FreeboardResponseDTO delete(final String userId, final Long id) {
 
         freeboardRepository.deleteById(id);
-        return retrieve(userId);
+        return retrieve();
 
     }
 
