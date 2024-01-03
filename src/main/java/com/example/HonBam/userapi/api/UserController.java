@@ -22,9 +22,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.math.BigInteger;
-import java.nio.file.attribute.UserPrincipal;
-import java.security.SecureRandom;
 
 @RestController
 @Slf4j
