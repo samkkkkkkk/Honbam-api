@@ -2,6 +2,7 @@ package com.example.HonBam.userapi.service;
 
 import com.example.HonBam.auth.TokenProvider;
 import com.example.HonBam.auth.TokenUserInfo;
+import com.example.HonBam.aws.S3Service;
 import com.example.HonBam.exception.NoRegisteredArgumentsException;
 import com.example.HonBam.userapi.dto.request.LoginRequestDTO;
 import com.example.HonBam.userapi.dto.request.UserRequestSignUpDTO;
@@ -38,7 +39,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final TokenProvider tokenProvider;
-//    final S3Service s3Service;
+    final S3Service s3Service;
 
     @Value("${kakao.client_id}")
     private String KAKAO_CLIENT_ID;
@@ -55,8 +56,8 @@ public class UserService {
     private String NAVER_CLIENT_SECRET;
 
 
-    @Value("${upload.path}")
-    private String uploadRootPath;
+//    @Value("${upload.path}")
+//    private String uploadRootPath;
 
     // 회원 가입 처리
     public UserSignUpResponseDTO create(
@@ -179,11 +180,11 @@ public class UserService {
                 = UUID.randomUUID() + "_" + profileImg.getOriginalFilename();
 
         // 파일을 저장
-        File uploadFile = new File(uploadRootPath + "/" + uniqueFileName);
-        profileImg.transferTo(uploadFile);
+//        File uploadFile = new File(uploadRootPath + "/" + uniqueFileName);
+//        profileImg.transferTo(uploadFile);
 
-        return uniqueFileName;
-//        return s3Service.uploadToS3Bucket(profileImg.getBytes(), uniqueFileName);
+//        return uniqueFileName;
+        return s3Service.uploadToS3Bucket(profileImg.getBytes(), uniqueFileName);
     }
 
     public String findProfilePath(String userId) {
