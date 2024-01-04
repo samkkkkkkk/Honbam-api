@@ -285,6 +285,7 @@ public class UserController {
         }
     }
 
+    // s3에서 불러온 프로필 사진 처리
     @GetMapping("/profile-s3")
     public ResponseEntity<?> s3Profile(
             @AuthenticationPrincipal TokenUserInfo userInfo

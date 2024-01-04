@@ -182,7 +182,7 @@ public class UserService {
         // 파일을 저장
 //        File uploadFile = new File(uploadRootPath + "/" + uniqueFileName);
 //        profileImg.transferTo(uploadFile);
-
+//
 //        return uniqueFileName;
         return s3Service.uploadToS3Bucket(profileImg.getBytes(), uniqueFileName);
     }
