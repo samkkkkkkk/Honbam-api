@@ -26,6 +26,7 @@ public class LoginResponseDTO {
     private String address;
     private String phoneNumber;
     private String password;
+    private String userId;
 
 
 
@@ -39,6 +40,7 @@ public class LoginResponseDTO {
         this.address = user.getAddress();
         this.phoneNumber = user.getPhoneNumber();
         this.password = user.getPassword();
+        this.userId = user.getId();
 
     }
 }

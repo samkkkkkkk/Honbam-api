@@ -14,8 +14,10 @@ public interface UserRepository
 
     // 이메일 중복 체크
     // @Query("SELECT COUNT(*) FROM User u WHERE u.email =: email") // JPQL
-    boolean existsByEmail(String email);
+    boolean existsByEmail(String value);
 
+    // 아이디 중복체크
+    boolean existsByUserId(String value);
 
 }
 

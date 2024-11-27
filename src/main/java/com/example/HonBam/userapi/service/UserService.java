@@ -27,8 +27,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.math.BigInteger;
-import java.security.SecureRandom;
 import java.util.Map;
 import java.util.UUID;
 
@@ -66,7 +64,7 @@ public class UserService {
     ) {
         String email = dto.getEmail();
 
-        if(isDuplicate(email)) {
+        if(isDuplicate(email, "email")) {
             log.warn("이메일이 중복되었습니다. - {}", email);
             throw new RuntimeException("중복된 이메일 입니다.");
         }
@@ -83,8 +81,15 @@ public class UserService {
 
     }
 
-    public boolean isDuplicate(String email) {
-        return userRepository.existsByEmail(email);
+    public boolean isDuplicate(String target, String value) {
+
+        if (target.equals("userId")) {
+            return userRepository.existsByUserId(value);
+        } else if (target.equals("email")) {
+            return userRepository.existsByEmail(value);
+        }
+
+        return false;
     }
 
     // 회원 인증
@@ -209,7 +214,7 @@ public class UserService {
         // 회원가입 처리 -> 이메일 중복 검사 진행 -> 자체 jwt를 생성해서 토큰을 화면단에 리턴.
         // -> 화면단에서는 적절한 url을 선택하여 redirect를 진행.
 
-        if(!isDuplicate(dto.getKakaoAccount().getEmail())) {
+        if(!isDuplicate(dto.getKakaoAccount().getEmail(), "email")) {
             // 이메일이 중복되지 않았다 -> 이전에 로그인 한 적이 없음 -> DB에 데이터를 세팅
             User saved = userRepository.save(dto.toEntity((String)responseData.get("access_token")));
         }
@@ -324,7 +329,7 @@ public class UserService {
         // 회원가입 처리 -> 이메일 중복 검사 진행 -> 자체 jwt를 생성해서 토큰을 화면단에 리턴.
         // -> 화면단에서는 적절한 url을 선택하여 redirect를 진행.
 
-        if(!isDuplicate(dto.getEmail())) {
+        if(!isDuplicate(dto.getEmail(), "email")) {
             // 이메일이 중복되지 않았다 -> 이전에 로그인 한 적이 없음 -> DB에 데이터를 세팅
             User saved = userRepository.save(dto.toEntity((String)responseData.get("access_token")));
         }
@@ -425,7 +430,7 @@ public class UserService {
         // 회원가입 처리 -> 이메일 중복 검사 진행 -> 자체 jwt를 생성해서 토큰을 화면단에 리턴.
         // -> 화면단에서는 적절한 url을 선택하여 redirect를 진행.
 
-        if(!isDuplicate(dto.getKakaoAccount().getEmail())) {
+        if(!isDuplicate(dto.getKakaoAccount().getEmail(), "email")) {
             // 이메일이 중복되지 않았다 -> 이전에 로그인 한 적이 없음 -> DB에 데이터를 세팅
             User saved = userRepository.save(dto.toEntity((String)responseData.get("access_token")));
         }

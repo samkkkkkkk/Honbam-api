@@ -21,12 +21,15 @@ public class FreeboardDetailResponseDTO {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime date;
 
+    private String userId;
+
 
     public FreeboardDetailResponseDTO(Freeboard freeboard) {
         this.id = freeboard.getId();
         this.title = freeboard.getTitle();
         this.content = freeboard.getContent();
         this.userName = freeboard.getUser().getUserName();
+        this.userId = freeboard.getUser().getId();
         if(freeboard.getUpdateDate() != null){
             this.date = freeboard.getUpdateDate();
         }else {

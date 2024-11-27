@@ -38,14 +38,16 @@ public class UserController {
     // 이메일 중복 확인 요청 처리
     // GET: /api/auth/check?email=zzzz@xxx.com
     @GetMapping("/check")
-    public ResponseEntity<?> check(String email) {
-        if(email.trim().isEmpty()) {
+    public ResponseEntity<?> check(@RequestParam(value = "value") String value,
+                                   @RequestParam(value = "target") String target
+    ) {
+        if(target.trim().isEmpty()) {
             return ResponseEntity.badRequest()
                     .body("이메일이 없습니다!");
         }
 
-        boolean resultFlag = userService.isDuplicate(email);
-        log.info("{} 중복?? - {}", email, resultFlag);
+        boolean resultFlag = userService.isDuplicate(target, value);
+        log.info("{} 중복?? - {}", target, resultFlag);
 
         return ResponseEntity.ok().body(resultFlag);
     }
@@ -260,7 +262,7 @@ public class UserController {
     public ResponseEntity<?> logout(
             @AuthenticationPrincipal TokenUserInfo userInfo
     ) {
-        log.info("/api/auth/logout - GET! - user: {}", userInfo.getEmail());
+        log.info("/api/auth/logout - GET! - user: {}", userInfo.getUserId());
 
         String result = userService.logout(userInfo);
         return ResponseEntity.ok().body(result);

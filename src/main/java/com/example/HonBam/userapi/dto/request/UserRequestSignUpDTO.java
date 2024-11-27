@@ -18,6 +18,7 @@ public class UserRequestSignUpDTO {
     @Email
     private String email;
 
+    private String userId;
 
     private String phoneNumber;
 

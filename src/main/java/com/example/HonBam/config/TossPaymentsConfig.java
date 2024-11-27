@@ -1,0 +1,26 @@
+package com.example.HonBam.config;
+
+
+import lombok.Getter;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+@Getter
+public class TossPaymentsConfig {
+
+    @Value("${payment.toss.test_client_api_key}")
+    String tossClientKey;
+
+    @Value("${payment.toss.test_secrete_api_key}")
+    String tossSecretKey;
+
+    @Value("${payment.toss.success_url}")
+    String tossSuccessUrl;
+
+    @Value("${payment.toss.fail_url}")
+    String tossFailUrl;
+
+    private static final String URL = "https://api.tosspayments.com/v1/payments";
+
+}

@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 public class User {
 
     @Id
-    @Column(name = "user_id")
+    @Column(name = "id")
     @GeneratedValue(generator = "system-uuid")
     @GenericGenerator(name = "system-uuid", strategy = "uuid")
     private String id; // 계정명이 아니라 식별 코드
@@ -27,6 +27,7 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
+    private String userId;
 
     private String phoneNumber;
 
