@@ -36,6 +36,7 @@ public class FreeboardController {
             @RequestBody FreeboardRequestDTO requestDTO
     ) {
 
+
         FreeboardResponseDTO responseDTO =
                 freeboardService.createContent(requestDTO, userInfo);
 

@@ -56,6 +56,7 @@ public class WebSecurityConfig {
                 .authenticated()
                 .antMatchers("/api/auth/load-profile").authenticated()
                 .antMatchers("/api/recipe").permitAll()
+                .antMatchers("/api/tosspay/info").authenticated()
                 .antMatchers("/api/tosspay/**").permitAll()
                 // '/api/auth'로 시작하는 요청과 '/'요청은 권한 검사 없이 허용하겠다.
                 .antMatchers("/", "/api/auth/**").permitAll()
