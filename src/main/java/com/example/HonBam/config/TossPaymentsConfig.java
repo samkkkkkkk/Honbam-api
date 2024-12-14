@@ -21,6 +21,11 @@ public class TossPaymentsConfig {
     @Value("${payment.toss.fail_url}")
     String tossFailUrl;
 
-    private static final String URL = "https://api.tosspayments.com/v1/payments";
+    @Getter
+    private static final String TOSS_URl = "https://api.tosspayments.com/v1/payments";
+    @Getter
+    private static final String TOSS_CANCEL_URL = "https://api.tosspayments.com/v1/payments/{paymentKey}/cancel";
+    @Getter
+    private static final String TOSS_VIRTUAL_ACCOUNT = "https://api.tosspayments.com/v1/virtual-accounts";
 
 }

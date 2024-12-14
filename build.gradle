@@ -53,8 +53,14 @@ dependencies {
     // https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple
     implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1'
 
+    // WebClient를 사용하기 위한 모듈
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
     // 소스 코드 변경시 자동으로 페이지 리로드 해주는 라이브러리
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+    // jackson
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
 
 
 }

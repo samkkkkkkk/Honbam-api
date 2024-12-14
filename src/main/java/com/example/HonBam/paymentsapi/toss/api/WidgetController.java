@@ -2,9 +2,11 @@ package com.example.HonBam.paymentsapi.toss.api;
 
 import com.example.HonBam.auth.TokenUserInfo;
 import com.example.HonBam.config.TossPaymentsConfig;
+import com.example.HonBam.freeboardapi.dto.TosspaymentResponseDTO;
 import com.example.HonBam.paymentsapi.toss.dto.requestDTO.PaymentConfirmReqDTO;
 import com.example.HonBam.paymentsapi.toss.dto.requestDTO.PaymentInfoRequestDTO;
 import com.example.HonBam.paymentsapi.toss.service.TossService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
@@ -55,8 +57,13 @@ public class WidgetController {
     @PostMapping("/confirm")
     public ResponseEntity<?> confirmPayment(@RequestBody PaymentConfirmReqDTO requestDTO) {
 
-        ResponseEntity<Map> confirmDTO = tossService.confirm(requestDTO);
-        return confirmDTO;
+        TosspaymentResponseDTO confirmDTO = null;
+        try {
+            confirmDTO = tossService.confirm(requestDTO);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        return ResponseEntity.ok().body(confirmDTO);
     }
 
 //    @RequestMapping(value = "/confirm")
@@ -125,6 +132,13 @@ public class WidgetController {
 //        return ResponseEntity.status(code).body(jsonObject);
 //    }
 
+    @PostMapping("/cancel")
+    public ResponseEntity<?> tossCancel(@RequestBody  PaymentConfirmReqDTO reqDTO) {
+        log.info("/cancel 요청이 들어옴");
+        tossService.cancel(reqDTO);
+        return ResponseEntity.ok("ok");
+    }
+
     /**
      * 인증성공처리
      *
@@ -162,6 +176,7 @@ public class WidgetController {
 
         return "/fail";
     }
+
 
 
 }
