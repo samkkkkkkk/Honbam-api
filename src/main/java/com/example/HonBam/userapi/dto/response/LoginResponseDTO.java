@@ -39,7 +39,6 @@ public class LoginResponseDTO {
         this.userPay = String.valueOf(user.getUserPay());
         this.address = user.getAddress();
         this.phoneNumber = user.getPhoneNumber();
-        this.password = user.getPassword();
         this.userId = user.getId();
 
     }

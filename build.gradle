@@ -8,7 +8,7 @@ group = 'com.example'
 version = '0.0.1-SNAPSHOT'
 
 java {
-    sourceCompatibility = '11'
+    sourceCompatibility = '17'
 }
 
 configurations {
@@ -38,6 +38,8 @@ dependencies {
     // api 사용 방법을 명세한 문서 라이브러리 (swagger)
     implementation 'org.springdoc:springdoc-openapi-ui:1.6.9'
 
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
+
     // json web token 라이브러리
     implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
     implementation 'io.jsonwebtoken:jjwt-impl:0.11.2'
@@ -49,6 +51,7 @@ dependencies {
 
     // 파일 업로드 라이브러리
     implementation 'commons-io:commons-io:2.8.0'
+
 
     // https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple
     implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1'
